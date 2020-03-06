@@ -10,6 +10,9 @@ public class Main {
 
     public static void main(String[] args) {
 
+        GridParser gridParser = new GridParser("data/static-1.ari", "data/dynamic-1.ari");
+        gridParser.readParticles();
+
         double distance =Double.parseDouble(args[1]);
 
         GridParser gridParser= new GridParser("");

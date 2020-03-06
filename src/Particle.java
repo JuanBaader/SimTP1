@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Particle {
+    private long id;
     private double xpos;
     private double ypos;
     private double radius;
@@ -9,7 +10,8 @@ public class Particle {
     private int id;
     private List<Particle> nearParticles;
 
-    public Particle (double xpos, double ypos, double radius, double property){
+    public Particle (long id, double xpos, double ypos, double radius, double property){
+        this.id=id;
         this.xpos=xpos;
         this.ypos=ypos;
         this.radius=radius;

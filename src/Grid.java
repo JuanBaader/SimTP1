@@ -11,28 +11,28 @@ public class Grid {
     boolean outlineEnabled;
     double blockLength;
     double size;
-    double particleAmmount;
-    double distance;
+    double Rc;
     double MaxRadius;
     List<Particle> particles;
     ArrayList<List<List<Particle>>> grid;
+    double L, N;
 
-    public Grid(double size, double particleAmmount, double distance) {
-        this.size = size;
-        this.particleAmmount = particleAmmount;
-        this.particles = new ArrayList<Particle>();
+    public Grid(List<Particle> particles, double L, double N) {
+        this.particles = particles;
+        this.L = L;
+        this.N = N;
         this.outlineEnabled=false;
     }
 
-    public void generateGrid(double distance){
-        this.distance=distance;
-        this.blockLength=calculateBlockLength(this.distance,this.size,this.MaxRadius);
+    public void generateGrid(double Rc){
+        this.Rc=Rc;
+        this.blockLength=calculateBlockLength(this.Rc,this.size,this.MaxRadius);
         grid = startGrid();
         addParticlesToGrid();
     }
 
-    static private double calculateBlockLength(double distance, double size,double radius){
-        double minsize = distance+radius*2;
+    static private double calculateBlockLength(double Rc, double size, double radius){
+        double minsize = Rc+radius*2;
         return (size)/floor(size/minsize);
     }
 
@@ -75,13 +75,13 @@ public class Grid {
             for ( xIter=0; xIter<size/blockLength; xIter++){
                 for (Particle particle: grid.get(yIter).get(xIter)) {
                     //particle.addAllParticles(grid.get(i).get(j));
-                    calculateMultipleDistance(particle,grid.get(yIter    ).get(xIter    ),distance);
+                    calculateMultipleDistance(particle,grid.get(yIter    ).get(xIter    ),Rc);
                     if(xIter < (int)(size/blockLength))
-                        calculateMultipleDistance(particle,grid.get(yIter    ).get(xIter + 1),distance);
+                        calculateMultipleDistance(particle,grid.get(yIter    ).get(xIter + 1),Rc);
                     if(yIter < (int)(size/blockLength))
-                        calculateMultipleDistance(particle,grid.get(yIter + 1).get(xIter    ),distance);
+                        calculateMultipleDistance(particle,grid.get(yIter + 1).get(xIter    ),Rc);
                     if(xIter < (int)(size/blockLength) && yIter < (int)(size/blockLength))
-                        calculateMultipleDistance(particle,grid.get(yIter + 1).get(xIter + 1),distance);
+                        calculateMultipleDistance(particle,grid.get(yIter + 1).get(xIter + 1),Rc);
                     //agregar caso de que se una por abajo
                     if(outlineEnabled){
                         if(yIter==0)
@@ -105,9 +105,9 @@ public class Grid {
         }
     }
 
-    private static void calculateMultipleDistance(Particle fromParticle,List<Particle> block,double distance){
+    private static void calculateMultipleDistance(Particle fromParticle,List<Particle> block,double Rc){
         for (Particle toParticle: block) {
-            if(calculateDistance(fromParticle,toParticle)<distance){
+            if(calculateDistance(fromParticle,toParticle)<Rc){
                 fromParticle.addNearParticle(toParticle);
                 toParticle.addNearParticle(fromParticle);
             }
