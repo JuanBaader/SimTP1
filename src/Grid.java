@@ -118,5 +118,9 @@ public class Grid {
         particles.add(particle);
     }
 
+    public List<Particle> getParticles(){
+        return particles;
+    }
+
 
 }

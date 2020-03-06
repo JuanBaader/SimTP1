@@ -6,6 +6,7 @@ public class Particle {
     private double ypos;
     private double radius;
     private double property;
+    private int id;
     private List<Particle> nearParticles;
 
     public Particle (double xpos, double ypos, double radius, double property){
@@ -55,4 +56,6 @@ public class Particle {
     public void setProperty(long property) {
         this.property = property;
     }
+
 }
+
