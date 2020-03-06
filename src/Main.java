@@ -14,18 +14,13 @@ public class Main {
 
         GridParser gridParser = new GridParser("data/static-1.ari", "data/dynamic-1.ari");
         Grid grid = gridParser.readParticles();
+        
+        double distance =Double.parseDouble("4");
 
-        double distance =Double.parseDouble(args[1]);
+        grid.generateGrid(distance);
+        grid.calculateNear();
+        writeToFile("output",grid);
 
-        try{
-            grid.generateGrid(distance);
-            if(grid != null) {
-                grid.calculateNear();
-            }
-            writeToFile("output",grid);
-        }catch (Exception e){
-
-        }
 
     }
 
@@ -40,27 +35,28 @@ public class Main {
                 }
             }
             neighborWriter.close();
-
+            
             FileWriter allPositions = new FileWriter("allParticles.txt");
             allPositions.write(Double.toString(grid.N)+"\n\n");
             int i;
-            int chosenId = 20;
+            int chosenId = 2;
             Particle tmp;
             Set<Long> usedId=new HashSet<>();
             for(i=0;i<grid.N;i++){
                 tmp=particles.get(chosenId);
-                neighborWriter.write(tmp.getXpos() + "\t"+tmp.getYpos() + "\t" + tmp.getRadius() + "\t0\t0\t255");
+                allPositions.write(tmp.getXpos() + "\t"+tmp.getYpos() + "\t" + tmp.getRadius() + "\t0\t0\t255");
                 usedId.add(tmp.getId());
                 for (Particle toParticle : tmp.getNearParticles()) {
-                    neighborWriter.write(toParticle.getXpos() + "\t"+toParticle.getYpos() + "\t" + toParticle.getRadius() + "\t0\t255\t0");
+                    allPositions.write(toParticle.getXpos() + "\t"+toParticle.getYpos() + "\t" + toParticle.getRadius() + "\t0\t255\t0");
                     usedId.add(toParticle.getId());
                 }
             }
             for(Particle fromParticle: particles){
                 if(usedId.contains(fromParticle.getId())) {
-                    neighborWriter.write(fromParticle.getXpos() + "\t"+fromParticle.getYpos() + "\t" + fromParticle.getRadius() + "\t255\t0\t0");
+                    allPositions.write(fromParticle.getXpos() + "\t"+fromParticle.getYpos() + "\t" + fromParticle.getRadius() + "\t255\t0\t0");
                 }
             }
+            allPositions.close();
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();

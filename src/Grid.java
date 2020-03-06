@@ -1,4 +1,4 @@
-import javafx.util.Pair;
+// import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,7 @@ public class Grid {
     double blockLength;
     double Rc;
     double maxRadius;
+    int M;
     List<Particle> particles;
     ArrayList<List<List<Particle>>> grid;
     double L, N;
@@ -27,6 +28,7 @@ public class Grid {
         this.Rc=Rc;
         calculateMaxRadius();
         this.blockLength=calculateBlockLength(this.Rc,this.L,this.maxRadius);
+        M = (int) (L/blockLength);
         grid = startGrid();
         addParticlesToGrid();
     }
@@ -46,9 +48,9 @@ public class Grid {
 
     private ArrayList<List<List<Particle>>> startGrid(){
         ArrayList<List<List<Particle>>> grid=new ArrayList<>();
-        for(int i =0;i<L/blockLength;i++){
+        for(int i =0;i<M;i++){
             grid.add(new ArrayList<>());
-            for(int j =0;j<L/blockLength;j++){
+            for(int j =0;j<M;j++){
                 grid.get(i).add(new ArrayList<>());
             }
         }
@@ -79,26 +81,42 @@ public class Grid {
     public void calculateNear(){
         int yIter;
         int xIter;
-        for ( yIter=0; yIter<L/blockLength; yIter++){
-            for ( xIter=0; xIter<L/blockLength; xIter++){
+        for ( yIter=0; yIter<M; yIter++){
+            for ( xIter=0; xIter<M; xIter++){
+                for (Particle p1 : grid.get(yIter).get(xIter)) {
+                    for (Particle p2 : grid.get(yIter).get(xIter)) {
+                        if (calculateDistance(p1,p2)<Rc && p1.getId() != p2.getId()) {
+                            p1.addNearParticle(p2);
+                        }
+                    }
+                }
                 for (Particle particle: grid.get(yIter).get(xIter)) {
                     //particle.addAllParticles(grid.get(i).get(j));
-                    calculateMultipleDistance(particle,grid.get(yIter).get(xIter),Rc);
-                    if(xIter < (int)(L/blockLength))
-                        calculateMultipleDistance(particle,grid.get(yIter    ).get(xIter + 1),Rc);
-                    if(yIter < (int)(L/blockLength))
+                    // calculateMultipleDistance(particle,grid.get(yIter).get(xIter),Rc);
+                    if(xIter < M-1)
+                        calculateMultipleDistance(particle,grid.get(yIter    ).get((xIter + 1)),Rc);
+                    if(yIter < M-1)
                         calculateMultipleDistance(particle,grid.get(yIter + 1).get(xIter    ),Rc);
-                    if(xIter < (int)(L/blockLength) && yIter < (int)(L/blockLength))
+                    if(xIter < M-1 && yIter < M-1)
                         calculateMultipleDistance(particle,grid.get(yIter + 1).get(xIter + 1),Rc);
                     //agregar caso de que se una por abajo
                     if(outlineEnabled){
                         if(yIter==0)
-                            calculateMultipleDistanceOutline(particle,grid.get((int)(L/blockLength)).get(xIter               ),Rc,false,true);
+                            calculateMultipleDistanceOutline(particle,grid.get(M).get(xIter               ),Rc,false,true);
                         if(xIter==0)
-                            calculateMultipleDistanceOutline(particle,grid.get(yIter               ).get((int)(L/blockLength)),Rc,true,false);
+                            calculateMultipleDistanceOutline(particle,grid.get(yIter               ).get(M),Rc,true,false);
                         if(yIter==0 && xIter==0)
-                            calculateMultipleDistanceOutline(particle,grid.get((int)(L/blockLength)).get((int)(L/blockLength)),Rc,true,true );
+                            calculateMultipleDistanceOutline(particle,grid.get(M).get(M),Rc,true,true );
                     }
+
+                    // // particles in the same cell
+                    // calculateMultipleDistance(particle, grid.get(yIter).get(xIter), Rc);
+                    // // particles in right adjacent cell
+                    // calculateMultipleDistance(particle, grid.get((yIter+1)%M).get(xIter), Rc);
+                    // //particles in lower adjacent cell
+                    // calculateMultipleDistance(particle, grid.get((yIter)%M).get((xIter+1)%M), Rc);
+                    // //particles in lower-right adjacent cell
+                    // calculateMultipleDistance(particle, grid.get((yIter+1)%M).get((xIter+1)%M), Rc);
                 }
             }
         }

@@ -33,7 +33,7 @@ public class GridParser {
         this.particleList = new ArrayList<>();
     }
 
-    public void readParticles() {
+    public Grid readParticles() {
         try {
             Scanner staticScanner = new Scanner(staticFile);
             Scanner dynamicScanner = new Scanner(dynamicFile);
@@ -52,8 +52,11 @@ public class GridParser {
             }
             staticScanner.close();
             dynamicScanner.close();
+            Grid grid = new Grid(this.particleList, this.L, this.N);
+            return grid;
         } catch (FileNotFoundException e) {
             System.err.println(e.getMessage());
-        }    
+        }   
+        return null; 
     }
 }
