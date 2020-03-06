@@ -56,8 +56,8 @@ public class Grid {
     }
 
     private double calculateDistanceOutline(Particle fromParticle, Particle toParticle,boolean xOffset,boolean yOffset){
-        double x = fromParticle.getXpos() - (toParticle.getXpos() - size * (xOffset?1:0));
-        double y = fromParticle.getYpos() - (toParticle.getYpos() - size * (xOffset?1:0));
+        double x = fromParticle.getXpos() - (toParticle.getXpos() - L * (xOffset?1:0));
+        double y = fromParticle.getYpos() - (toParticle.getYpos() - L * (xOffset?1:0));
         double temp;
         return (temp=(sqrt(x*x+y*y)-fromParticle.getRadius()-toParticle.getRadius()))<0?0:temp;
     }
@@ -79,25 +79,25 @@ public class Grid {
     public void calculateNear(){
         int yIter;
         int xIter;
-        for ( yIter=0; yIter<size/blockLength; yIter++){
-            for ( xIter=0; xIter<size/blockLength; xIter++){
+        for ( yIter=0; yIter<L/blockLength; yIter++){
+            for ( xIter=0; xIter<L/blockLength; xIter++){
                 for (Particle particle: grid.get(yIter).get(xIter)) {
                     //particle.addAllParticles(grid.get(i).get(j));
-                    calculateMultipleDistance(particle,grid.get(yIter    ).get(xIter    ),Rc);
-                    if(xIter < (int)(size/blockLength))
+                    calculateMultipleDistance(particle,grid.get(yIter).get(xIter),Rc);
+                    if(xIter < (int)(L/blockLength))
                         calculateMultipleDistance(particle,grid.get(yIter    ).get(xIter + 1),Rc);
-                    if(yIter < (int)(size/blockLength))
+                    if(yIter < (int)(L/blockLength))
                         calculateMultipleDistance(particle,grid.get(yIter + 1).get(xIter    ),Rc);
-                    if(xIter < (int)(size/blockLength) && yIter < (int)(size/blockLength))
+                    if(xIter < (int)(L/blockLength) && yIter < (int)(L/blockLength))
                         calculateMultipleDistance(particle,grid.get(yIter + 1).get(xIter + 1),Rc);
                     //agregar caso de que se una por abajo
                     if(outlineEnabled){
                         if(yIter==0)
-                            calculateMultipleDistanceOutline(particle,grid.get((int)(size/blockLength)).get(xIter                  ),Rc,false,true);
+                            calculateMultipleDistanceOutline(particle,grid.get((int)(L/blockLength)).get(xIter               ),Rc,false,true);
                         if(xIter==0)
-                            calculateMultipleDistanceOutline(particle,grid.get(yIter                  ).get((int)(size/blockLength)),Rc,true,false);
+                            calculateMultipleDistanceOutline(particle,grid.get(yIter               ).get((int)(L/blockLength)),Rc,true,false);
                         if(yIter==0 && xIter==0)
-                            calculateMultipleDistanceOutline(particle,grid.get((int)(size/blockLength)).get((int)(size/blockLength)),Rc,true,true );
+                            calculateMultipleDistanceOutline(particle,grid.get((int)(L/blockLength)).get((int)(L/blockLength)),Rc,true,true );
                     }
                 }
             }
