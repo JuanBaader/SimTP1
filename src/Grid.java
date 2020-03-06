@@ -8,28 +8,27 @@ public class Grid {
 
     double blockLength;
     double size;
-    double particleAmmount;
-    double distance;
+    double Rc;
     double MaxRadius;
     List<Particle> particles;
     ArrayList<List<List<Particle>>> grid;
+    double L, N;
 
-    public Grid(double size, double particleAmmount, double distance) {
-        this.size = size;
-        this.particleAmmount = particleAmmount;
-        this.particles = new ArrayList<Particle>();
+    public Grid(List<Particle> particles, double L, double N) {
+        this.particles = particles;
+        this.L = L;
+        this.N = N;
     }
 
-    public void generateGrid(double distance){
-        this.distance=distance;
-        this.blockLength=calculateBlockLength(this.distance,this.size,this.MaxRadius);
-         grid = startGrid();
-
-         addParticlesToGrid();
+    public void generateGrid(double Rc){
+        this.Rc=Rc;
+        this.blockLength=calculateBlockLength(this.Rc,this.size,this.MaxRadius);
+        grid = startGrid();
+        addParticlesToGrid();
     }
 
-    static private double calculateBlockLength(double distance, double size,double radius){
-        double minsize = distance+radius*2;
+    static private double calculateBlockLength(double Rc, double size, double radius){
+        double minsize = Rc+radius*2;
         return (size)/floor(size/minsize);
     }
 
@@ -49,7 +48,6 @@ public class Grid {
         double y = particle1.getYpos() - particle2.getYpos();
         double temp;
         return (temp=(sqrt(x*x+y*y)-particle1.getRadius()-particle2.getRadius()))<0?0:temp;
-
     }
 
     private void addParticlesToGrid(){
@@ -65,19 +63,19 @@ public class Grid {
             for ( j=0;j<size/blockLength; j++){
                 for (Particle particle: grid.get(i).get(j)) {
                     //particle.addAllParticles(grid.get(i).get(j));
-                    calculateMultipleDistance(particle,grid.get(i    ).get(j    ),distance);
-                    calculateMultipleDistance(particle,grid.get(i    ).get(j + 1),distance);
-                    calculateMultipleDistance(particle,grid.get(i + 1).get(j    ),distance);
-                    calculateMultipleDistance(particle,grid.get(i + 1).get(j + 1),distance);
+                    calculateMultipleDistance(particle,grid.get(i    ).get(j    ),Rc);
+                    calculateMultipleDistance(particle,grid.get(i    ).get(j + 1),Rc);
+                    calculateMultipleDistance(particle,grid.get(i + 1).get(j    ),Rc);
+                    calculateMultipleDistance(particle,grid.get(i + 1).get(j + 1),Rc);
                     //agregar caso de que se una por abajo
                 }
             }
         }
     }
 
-    private static void calculateMultipleDistance(Particle fromParticle,List<Particle> block,double distance){
+    private static void calculateMultipleDistance(Particle fromParticle,List<Particle> block,double Rc){
         for (Particle toParticle: block) {
-            if(calculateDistance(fromParticle,toParticle)<distance){
+            if(calculateDistance(fromParticle,toParticle)<Rc){
                 fromParticle.addNearParticle(toParticle);
                 toParticle.addNearParticle(fromParticle);
             }

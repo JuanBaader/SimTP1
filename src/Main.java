@@ -8,17 +8,9 @@ public class Main {
 
     public static void main(String[] args) {
 
-
-
-        GridParser gridParser= new GridParser("");
-        Grid grid = gridParser.generateGrid(1);
-
-        try{
-            grid.calculateNear();
-
-        }catch (Exception e){
-
-        }
+        GridParser gridParser = new GridParser("data/static-1.ari", "data/dynamic-1.ari");
+        gridParser.readParticles();
+        
     }
 
 //    static private double calculateBlockLength(double distance, double size,double radius){
