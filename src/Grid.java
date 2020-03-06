@@ -85,11 +85,11 @@ public class Grid {
                     //agregar caso de que se una por abajo
                     if(outlineEnabled){
                         if(yIter==0)
-                            calculateMultipleDistanceOutline(particle,grid.get((int)(size/blockLength)).get(xIter                  ),distance,false,true);
+                            calculateMultipleDistanceOutline(particle,grid.get((int)(size/blockLength)).get(xIter                  ),Rc,false,true);
                         if(xIter==0)
-                            calculateMultipleDistanceOutline(particle,grid.get(yIter                  ).get((int)(size/blockLength)),distance,true,false);
+                            calculateMultipleDistanceOutline(particle,grid.get(yIter                  ).get((int)(size/blockLength)),Rc,true,false);
                         if(yIter==0 && xIter==0)
-                            calculateMultipleDistanceOutline(particle,grid.get((int)(size/blockLength)).get((int)(size/blockLength)),distance,true,true );
+                            calculateMultipleDistanceOutline(particle,grid.get((int)(size/blockLength)).get((int)(size/blockLength)),Rc,true,true );
                     }
                 }
             }
