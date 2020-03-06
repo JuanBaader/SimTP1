@@ -10,7 +10,9 @@ public class Main {
 
         GridParser gridParser = new GridParser("data/static-1.ari", "data/dynamic-1.ari");
         gridParser.readParticles();
-        
+        Grid grid = new Grid(gridParser.particleList, gridParser.L, gridParser.N);
+        grid.generateGrid(3);
+        grid.calculateNear();   
     }
 
 //    static private double calculateBlockLength(double distance, double size,double radius){

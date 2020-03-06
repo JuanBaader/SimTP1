@@ -17,9 +17,9 @@ public class GridParser {
 
     private File staticFile;
     private File dynamicFile;
-    private List<Particle> particleList;
-    private Integer N;
-    private Double L;
+    public List<Particle> particleList;
+    public Integer N;
+    public Double L;
 
     /**
      * Constructor.

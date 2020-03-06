@@ -7,9 +7,8 @@ import static java.lang.Math.sqrt;
 public class Grid {
 
     double blockLength;
-    double size;
     double Rc;
-    double MaxRadius;
+    double maxRadius;
     List<Particle> particles;
     ArrayList<List<List<Particle>>> grid;
     double L, N;
@@ -22,9 +21,18 @@ public class Grid {
 
     public void generateGrid(double Rc){
         this.Rc=Rc;
-        this.blockLength=calculateBlockLength(this.Rc,this.size,this.MaxRadius);
+        calculateMaxRadius();
+        this.blockLength=calculateBlockLength(this.Rc,this.L,this.maxRadius);
         grid = startGrid();
         addParticlesToGrid();
+    }
+
+    private void calculateMaxRadius() {
+        for (Particle p : particles) {
+            if (p.getRadius() > maxRadius) {
+                this.maxRadius = p.getRadius();
+            }
+        }
     }
 
     static private double calculateBlockLength(double Rc, double size, double radius){
@@ -34,9 +42,9 @@ public class Grid {
 
     private ArrayList<List<List<Particle>>> startGrid(){
         ArrayList<List<List<Particle>>> grid=new ArrayList<>();
-        for(int i =0;i<size/blockLength;i++){
+        for(int i =0;i<L/blockLength;i++){
             grid.add(new ArrayList<>());
-            for(int j =0;j<size/blockLength;j++){
+            for(int j =0;j<L/blockLength;j++){
                 grid.get(i).add(new ArrayList<>());
             }
         }
@@ -59,8 +67,8 @@ public class Grid {
     public void calculateNear(){
         int i;
         int j;
-        for ( i=0;i<size/blockLength; i++){
-            for ( j=0;j<size/blockLength; j++){
+        for ( i=0;i<L/blockLength; i++){
+            for ( j=0;j<L/blockLength; j++){
                 for (Particle particle: grid.get(i).get(j)) {
                     //particle.addAllParticles(grid.get(i).get(j));
                     calculateMultipleDistance(particle,grid.get(i    ).get(j    ),Rc);
