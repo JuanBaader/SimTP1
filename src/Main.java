@@ -38,7 +38,7 @@ public class Main {
                 myWriter.write("Particle" + i + "\n");
                 i++;
                 for(Particle toParticle : fromParticle.getNearParticles()){
-                    myWriter.write();
+                    myWriter.write("");
                 }
             }
 
