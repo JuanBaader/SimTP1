@@ -11,11 +11,12 @@ public class Main {
 
 
         GridParser gridParser= new GridParser("");
-        Grid grid = gridParser.generateGrid(1);
 
         try{
-            grid.calculateNear();
-
+            Grid grid = gridParser.generateGrid(1);
+            if(grid != null) {
+                grid.calculateNear();
+            }
         }catch (Exception e){
 
         }

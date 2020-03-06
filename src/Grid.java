@@ -1,3 +1,5 @@
+import javafx.util.Pair;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -6,6 +8,7 @@ import static java.lang.Math.sqrt;
 
 public class Grid {
 
+    boolean outlineEnabled;
     double blockLength;
     double size;
     double particleAmmount;
@@ -18,14 +21,14 @@ public class Grid {
         this.size = size;
         this.particleAmmount = particleAmmount;
         this.particles = new ArrayList<Particle>();
+        this.outlineEnabled=false;
     }
 
     public void generateGrid(double distance){
         this.distance=distance;
         this.blockLength=calculateBlockLength(this.distance,this.size,this.MaxRadius);
-         grid = startGrid();
-
-         addParticlesToGrid();
+        grid = startGrid();
+        addParticlesToGrid();
     }
 
     static private double calculateBlockLength(double distance, double size,double radius){
@@ -44,11 +47,18 @@ public class Grid {
         return grid;
     }
 
-    static private double calculateDistance(Particle particle1, Particle particle2){
-        double x = particle1.getXpos() - particle2.getXpos();
-        double y = particle1.getYpos() - particle2.getYpos();
+    private double calculateDistanceOutline(Particle fromParticle, Particle toParticle,boolean xOffset,boolean yOffset){
+        double x = fromParticle.getXpos() - (toParticle.getXpos() - size * (xOffset?1:0));
+        double y = fromParticle.getYpos() - (toParticle.getYpos() - size * (xOffset?1:0));
         double temp;
-        return (temp=(sqrt(x*x+y*y)-particle1.getRadius()-particle2.getRadius()))<0?0:temp;
+        return (temp=(sqrt(x*x+y*y)-fromParticle.getRadius()-toParticle.getRadius()))<0?0:temp;
+    }
+
+    static private double calculateDistance(Particle fromParticle, Particle toParticle){
+        double x = fromParticle.getXpos() - toParticle.getXpos();
+        double y = fromParticle.getYpos() - toParticle.getYpos();
+        double temp;
+        return (temp=(sqrt(x*x+y*y)-fromParticle.getRadius()-toParticle.getRadius()))<0?0:temp;
 
     }
 
@@ -59,18 +69,38 @@ public class Grid {
     }
 
     public void calculateNear(){
-        int i;
-        int j;
-        for ( i=0;i<size/blockLength; i++){
-            for ( j=0;j<size/blockLength; j++){
-                for (Particle particle: grid.get(i).get(j)) {
+        int yIter;
+        int xIter;
+        for ( yIter=0; yIter<size/blockLength; yIter++){
+            for ( xIter=0; xIter<size/blockLength; xIter++){
+                for (Particle particle: grid.get(yIter).get(xIter)) {
                     //particle.addAllParticles(grid.get(i).get(j));
-                    calculateMultipleDistance(particle,grid.get(i    ).get(j    ),distance);
-                    calculateMultipleDistance(particle,grid.get(i    ).get(j + 1),distance);
-                    calculateMultipleDistance(particle,grid.get(i + 1).get(j    ),distance);
-                    calculateMultipleDistance(particle,grid.get(i + 1).get(j + 1),distance);
+                    calculateMultipleDistance(particle,grid.get(yIter    ).get(xIter    ),distance);
+                    if(xIter < (int)(size/blockLength))
+                        calculateMultipleDistance(particle,grid.get(yIter    ).get(xIter + 1),distance);
+                    if(yIter < (int)(size/blockLength))
+                        calculateMultipleDistance(particle,grid.get(yIter + 1).get(xIter    ),distance);
+                    if(xIter < (int)(size/blockLength) && yIter < (int)(size/blockLength))
+                        calculateMultipleDistance(particle,grid.get(yIter + 1).get(xIter + 1),distance);
                     //agregar caso de que se una por abajo
+                    if(outlineEnabled){
+                        if(yIter==0)
+                            calculateMultipleDistanceOutline(particle,grid.get((int)(size/blockLength)).get(xIter                  ),distance,false,true);
+                        if(xIter==0)
+                            calculateMultipleDistanceOutline(particle,grid.get(yIter                  ).get((int)(size/blockLength)),distance,true,false);
+                        if(yIter==0 && xIter==0)
+                            calculateMultipleDistanceOutline(particle,grid.get((int)(size/blockLength)).get((int)(size/blockLength)),distance,true,true );
+                    }
                 }
+            }
+        }
+    }
+
+    private void calculateMultipleDistanceOutline(Particle fromParticle,List<Particle> block,double distance,boolean xOfset,boolean yOfset){
+        for (Particle toParticle: block) {
+            if(calculateDistanceOutline(fromParticle,toParticle,xOfset,yOfset)<distance){
+                fromParticle.addNearParticle(toParticle);
+                toParticle.addNearParticle(fromParticle);
             }
         }
     }
@@ -85,6 +115,8 @@ public class Grid {
     }
 
     public void addParticle(Particle particle){
-
+        particles.add(particle);
     }
+
+
 }
