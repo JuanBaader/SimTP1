@@ -17,7 +17,7 @@ public class Main {
         double distance = Double.parseDouble(args[0]);
 
         grid.generateGrid(distance);
-        grid.calculateNear();
+        grid.calculateNearBruteForce();
 
         long totalTime = System.currentTimeMillis() - startTime;
 
@@ -41,8 +41,6 @@ public class Main {
             allPositions.write(Integer.toString((int) grid.N) + "\n\n");
             // int i;
             int chosenId = 2;
-            Particle tmp;
-            Set<Long> usedId=new HashSet<>();
 
             for (Particle p : particles) {
                 if (particles.get(chosenId).getNearParticles().contains(p)) {
@@ -53,21 +51,6 @@ public class Main {
                     allPositions.write("Particle" + p.getId() + "\t" + p.getXpos() + "\t"+p.getYpos() + "\t" + p.getRadius() + "\t255\t200\t0\n");
                 }
             }
-
-            // for(i=0;i<grid.N;i++){
-                // tmp=particles.get(chosenId);
-                // allPositions.write("Particle" + chosenId + "\t" + tmp.getXpos() + "\t"+tmp.getYpos() + "\t" + tmp.getRadius() + "\t0\t0\t255\n");
-                // usedId.add(tmp.getId());
-                // for (Particle toParticle : tmp.getNearParticles()) {
-                //     allPositions.write("Particle" + toParticle.getId() + "\t" + toParticle.getXpos() + "\t"+toParticle.getYpos() + "\t" + toParticle.getRadius() + "\t0\t255\t0\n");
-                //     usedId.add(toParticle.getId());
-                // }
-            // }
-            // for(Particle fromParticle: particles){
-            //     if(usedId.contains(fromParticle.getId())) {
-            //         allPositions.write("Particle " + fromParticle.getId() + "\t" + fromParticle.getXpos() + "\t"+fromParticle.getYpos() + "\t" + fromParticle.getRadius() + "\t255\t0\t0\n");
-            //     }
-            // }
             allPositions.close();
         } catch (IOException e) {
             System.out.println("An error occurred.");

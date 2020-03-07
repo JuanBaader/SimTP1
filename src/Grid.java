@@ -59,7 +59,7 @@ public class Grid {
 
     private double calculateDistanceOutline(Particle fromParticle, Particle toParticle,boolean xOffset,boolean yOffset){
         double x = fromParticle.getXpos() - (toParticle.getXpos() - L * (xOffset?1:0));
-        double y = fromParticle.getYpos() - (toParticle.getYpos() - L * (xOffset?1:0));
+        double y = fromParticle.getYpos() - (toParticle.getYpos() - L * (yOffset?1:0));
         double temp;
         return (temp=(sqrt(x*x+y*y)-fromParticle.getRadius()-toParticle.getRadius()))<0?0:temp;
     }
@@ -91,32 +91,42 @@ public class Grid {
                     }
                 }
                 for (Particle particle: grid.get(yIter).get(xIter)) {
-                    //particle.addAllParticles(grid.get(i).get(j));
-                    // calculateMultipleDistance(particle,grid.get(yIter).get(xIter),Rc);
                     if(xIter < M-1)
-                        calculateMultipleDistance(particle,grid.get(yIter    ).get((xIter + 1)),Rc);
+                        calculateMultipleDistance(particle,grid.get(yIter).get((xIter + 1)),Rc);
                     if(yIter < M-1)
-                        calculateMultipleDistance(particle,grid.get(yIter + 1).get(xIter    ),Rc);
+                        calculateMultipleDistance(particle,grid.get(yIter + 1).get(xIter),Rc);
                     if(xIter < M-1 && yIter < M-1)
                         calculateMultipleDistance(particle,grid.get(yIter + 1).get(xIter + 1),Rc);
                     //agregar caso de que se una por abajo
                     if(outlineEnabled){
                         if(yIter==0)
-                            calculateMultipleDistanceOutline(particle,grid.get(M).get(xIter               ),Rc,false,true);
+                            calculateMultipleDistanceOutline(particle,grid.get(M).get(xIter),Rc,false,true);
                         if(xIter==0)
-                            calculateMultipleDistanceOutline(particle,grid.get(yIter               ).get(M),Rc,true,false);
+                            calculateMultipleDistanceOutline(particle,grid.get(yIter).get(M),Rc,true,false);
                         if(yIter==0 && xIter==0)
                             calculateMultipleDistanceOutline(particle,grid.get(M).get(M),Rc,true,true );
                     }
+                }
+            }
+        }
+    }
 
-                    // // particles in the same cell
-                    // calculateMultipleDistance(particle, grid.get(yIter).get(xIter), Rc);
-                    // // particles in right adjacent cell
-                    // calculateMultipleDistance(particle, grid.get((yIter+1)%M).get(xIter), Rc);
-                    // //particles in lower adjacent cell
-                    // calculateMultipleDistance(particle, grid.get((yIter)%M).get((xIter+1)%M), Rc);
-                    // //particles in lower-right adjacent cell
-                    // calculateMultipleDistance(particle, grid.get((yIter+1)%M).get((xIter+1)%M), Rc);
+    public void calculateNearBruteForce() {
+        double distance;
+        for (Particle p1 : particles) {
+            for (Particle p2 : particles) {
+                if (p2 != p1) {
+                    if (outlineEnabled) {
+                        distance = calculateDistanceOutline(p1, p2, p1.getXpos() < blockLength && p2.getXpos() > blockLength * (M-1) ||
+                         p2.getXpos() < blockLength && p1.getXpos() > blockLength * (M-1),
+                         p1.getYpos() < blockLength && p2.getYpos() > blockLength * (M-1) ||
+                         p2.getYpos() < blockLength && p1.getYpos() > blockLength * (M-1));
+                    } else {
+                        distance = calculateDistance(p1, p2);
+                    }
+                    if (distance < Rc) {
+                        p1.addNearParticle(p2);
+                    }
                 }
             }
         }
