@@ -24,12 +24,12 @@ public class Grid {
         this.periodicBoundary=false;
     }
 
-    public void generateGrid(double Rc, double M){
+    public void generateGrid(double Rc, int M){
         this.Rc=Rc;
         calculateMaxRadius();
         this.blockLength=calculateBlockLength(this.Rc,this.L,this.maxRadius);
-        if (M != 0.0 && L/M > blockLength) {
-            this.blockLength = L/floor(L/M);
+        if (M != 0 && L/M > blockLength) {
+            this.blockLength = L/M;
             this.M = (int) M;
         } else {
             this.M = (int) (L/blockLength);

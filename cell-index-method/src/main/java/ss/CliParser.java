@@ -13,12 +13,12 @@ public class CliParser {
     public double Rc;
     public boolean periodicBoundary = false;
     public boolean bruteForce = false;
-    public double M;
+    public int M;
 
     private static Options createOptions(){
         Options options = new Options();
         options.addOption("h", "help", false, "Shows help");
-        options.addOption("M", "cell-side", true, "Length of cell side");
+        options.addOption("M", "cell-number", true, "Number of cells");
         options.addOption("rc", "neighbourhood-radius", true, "Minimum radius of neighbourhood");
         options.addOption("sf", "static-file", true, "Path to static file");
         options.addOption("df", "dynamic-file", true, "Path to dynamic file");
@@ -47,7 +47,7 @@ public class CliParser {
             }
 
             if (cmd.hasOption("M")) {
-                M = Double.parseDouble(cmd.getOptionValue("M"));
+                M = Integer.parseInt(cmd.getOptionValue("M"));
             }
 
             dynamicFile = cmd.getOptionValue("df");
@@ -55,6 +55,8 @@ public class CliParser {
 
             if (cmd.hasOption("rc")){
                 Rc = Double.parseDouble(cmd.getOptionValue("rc"));
+            } else {
+                Rc = 2.0;
             }
             if (cmd.hasOption("pb")){
                 periodicBoundary = true;
