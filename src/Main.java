@@ -1,33 +1,34 @@
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static java.lang.Math.floor;
-import static java.lang.Math.sqrt;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        GridParser gridParser = new GridParser("data/static-1.ari", "data/dynamic-1.ari");
+        long startTime = System.currentTimeMillis();
+
+
+        GridParser gridParser = new GridParser("data/static-10.ari", "data/dynamic-10.ari");
         Grid grid = gridParser.readParticles();
         
-        double distance =Double.parseDouble("4");
+        double distance = Double.parseDouble(args[0]);
 
         grid.generateGrid(distance);
         grid.calculateNear();
-        writeToFile("output",grid);
 
+        long totalTime = System.currentTimeMillis() - startTime;
 
+        writeToFile("output", grid, totalTime);
     }
 
-    private static void writeToFile(String filename,Grid grid){
+    private static void writeToFile(String filename, Grid grid, long totalTime){
         try {
             FileWriter neighborWriter = new FileWriter("neighbors.txt");
             List<Particle> particles = grid.getParticles();
+            neighborWriter.write("Total Time Ellapsed (millis): " + totalTime + "\n");
             for(Particle fromParticle: particles){
                 neighborWriter.write("Particle " + fromParticle.getId() + ":\n");
                 for(Particle toParticle : fromParticle.getNearParticles()){
@@ -36,26 +37,37 @@ public class Main {
             }
             neighborWriter.close();
             
-            FileWriter allPositions = new FileWriter("allParticles.txt");
-            allPositions.write(Double.toString(grid.N)+"\n\n");
-            int i;
+            FileWriter allPositions = new FileWriter("allParticles.xyz");
+            allPositions.write(Integer.toString((int) grid.N) + "\n\n");
+            // int i;
             int chosenId = 2;
             Particle tmp;
             Set<Long> usedId=new HashSet<>();
-            for(i=0;i<grid.N;i++){
-                tmp=particles.get(chosenId);
-                allPositions.write(tmp.getXpos() + "\t"+tmp.getYpos() + "\t" + tmp.getRadius() + "\t0\t0\t255");
-                usedId.add(tmp.getId());
-                for (Particle toParticle : tmp.getNearParticles()) {
-                    allPositions.write(toParticle.getXpos() + "\t"+toParticle.getYpos() + "\t" + toParticle.getRadius() + "\t0\t255\t0");
-                    usedId.add(toParticle.getId());
+
+            for (Particle p : particles) {
+                if (particles.get(chosenId).getNearParticles().contains(p)) {
+                    allPositions.write("Particle" + p.getId() + "\t" + p.getXpos() + "\t"+p.getYpos() + "\t" + p.getRadius() + "\t255\t0\t0\n");
+                } else if (p != particles.get(chosenId)) {
+                    allPositions.write("Particle" + p.getId() + "\t" + p.getXpos() + "\t"+p.getYpos() + "\t" + p.getRadius() + "\t0\t255\t0\n");
+                } else {
+                    allPositions.write("Particle" + p.getId() + "\t" + p.getXpos() + "\t"+p.getYpos() + "\t" + p.getRadius() + "\t255\t200\t0\n");
                 }
             }
-            for(Particle fromParticle: particles){
-                if(usedId.contains(fromParticle.getId())) {
-                    allPositions.write(fromParticle.getXpos() + "\t"+fromParticle.getYpos() + "\t" + fromParticle.getRadius() + "\t255\t0\t0");
-                }
-            }
+
+            // for(i=0;i<grid.N;i++){
+                // tmp=particles.get(chosenId);
+                // allPositions.write("Particle" + chosenId + "\t" + tmp.getXpos() + "\t"+tmp.getYpos() + "\t" + tmp.getRadius() + "\t0\t0\t255\n");
+                // usedId.add(tmp.getId());
+                // for (Particle toParticle : tmp.getNearParticles()) {
+                //     allPositions.write("Particle" + toParticle.getId() + "\t" + toParticle.getXpos() + "\t"+toParticle.getYpos() + "\t" + toParticle.getRadius() + "\t0\t255\t0\n");
+                //     usedId.add(toParticle.getId());
+                // }
+            // }
+            // for(Particle fromParticle: particles){
+            //     if(usedId.contains(fromParticle.getId())) {
+            //         allPositions.write("Particle " + fromParticle.getId() + "\t" + fromParticle.getXpos() + "\t"+fromParticle.getYpos() + "\t" + fromParticle.getRadius() + "\t255\t0\t0\n");
+            //     }
+            // }
             allPositions.close();
         } catch (IOException e) {
             System.out.println("An error occurred.");
