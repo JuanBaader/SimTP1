@@ -1,0 +1,3 @@
+cd cell-index-method
+mvn package
+java -jar target/cell-index-method0version1.0.jar [params]

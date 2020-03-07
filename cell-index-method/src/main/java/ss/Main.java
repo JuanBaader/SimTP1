@@ -7,7 +7,6 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-
         
         CliParser cliParser = new CliParser();
         cliParser.parseOptions(args);
@@ -32,7 +31,7 @@ public class Main {
 
     private static void writeToFile(String filename, Grid grid, long totalTime){
         try {
-            FileWriter neighborWriter = new FileWriter("neighbors.txt");
+            FileWriter neighborWriter = new FileWriter("neighbors" + "N=" + grid.N + "M=" + grid.M + ".txt");
             List<Particle> particles = grid.getParticles();
             neighborWriter.write("Total Time Ellapsed (millis): " + totalTime + "\n");
             for(Particle fromParticle: particles){
@@ -43,7 +42,7 @@ public class Main {
             }
             neighborWriter.close();
             
-            FileWriter allPositions = new FileWriter("allParticles.xyz");
+            FileWriter allPositions = new FileWriter("allParticles" + "N=" + grid.N + "M=" + grid.M + ".xyz");
             allPositions.write(Integer.toString((int) grid.N) + "\n\n");
             // int i;
             int chosenId = 2;
