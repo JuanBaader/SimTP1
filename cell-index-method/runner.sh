@@ -9,7 +9,7 @@ rm -rf $(find -iregex .*.xyz)
 # do
     for bf in "-bf" ""
     do
-        for M in {1..5} 
+        for M in {1..15} 
         do
             mkdir -p results/times
             echo $'#'Parts$'\t'Time >> results/times/resultsM=$M$pb$bf.txt
