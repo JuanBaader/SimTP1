@@ -24,11 +24,16 @@ public class Grid {
         this.periodicBoundary=false;
     }
 
-    public void generateGrid(double Rc){
+    public void generateGrid(double Rc, double M){
         this.Rc=Rc;
         calculateMaxRadius();
         this.blockLength=calculateBlockLength(this.Rc,this.L,this.maxRadius);
-        M = (int) (L/blockLength);
+        if (M != 0.0 && L/M > blockLength) {
+            this.blockLength = L/floor(L/M);
+            this.M = (int) M;
+        } else {
+            this.M = (int) (L/blockLength);
+        }
         grid = startGrid();
         addParticlesToGrid();
     }

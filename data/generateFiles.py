@@ -3,8 +3,8 @@ from numpy import random
 def generateFiles(index, number, length):
     radius = .25
     
-    staticFile = open('static-' + str(index) + '.ari', 'w')
-    dynamicFile = open('dynamic-' + str(index) + '.ari', 'w')
+    staticFile = open('./data/st-' + str(index) + '.dat', 'w')
+    dynamicFile = open('./data/dyn-' + str(index) + '.dat', 'w')
 
     staticFile.write('{}\n'.format(number))
     staticFile.write('{}\n'.format(length))

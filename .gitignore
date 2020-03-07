@@ -26,3 +26,4 @@ buildNumber.properties
 .project
 .vscode/
 *.dat
+*.txt

@@ -2,10 +2,7 @@ package ss;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import ss.CliParser;
 
 public class Main {
 
@@ -18,7 +15,7 @@ public class Main {
         GridParser gridParser = new GridParser(cliParser.staticFile, cliParser.dynamicFile);
         Grid grid = gridParser.readParticles();
         grid.periodicBoundary = cliParser.periodicBoundary;
-        grid.generateGrid(cliParser.Rc);
+        grid.generateGrid(cliParser.Rc, cliParser.M);
         
         long startTime = System.currentTimeMillis();
         

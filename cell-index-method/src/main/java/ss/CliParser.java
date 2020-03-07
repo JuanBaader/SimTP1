@@ -13,10 +13,12 @@ public class CliParser {
     public double Rc;
     public boolean periodicBoundary = false;
     public boolean bruteForce = false;
+    public double M;
 
     private static Options createOptions(){
         Options options = new Options();
         options.addOption("h", "help", false, "Shows help");
+        options.addOption("M", "cell-side", true, "Length of cell side");
         options.addOption("rc", "neighbourhood-radius", true, "Minimum radius of neighbourhood");
         options.addOption("sf", "static-file", true, "Path to static file");
         options.addOption("df", "dynamic-file", true, "Path to dynamic file");
@@ -40,8 +42,12 @@ public class CliParser {
             }
 
             if (!cmd.hasOption("df") || !cmd.hasOption("sf")){
-                System.out.println("You must specify a static file and a dynamic file!");
+                System.out.println("Need static file and dynamic file");
                 System.exit(1);
+            }
+
+            if (cmd.hasOption("M")) {
+                M = Double.parseDouble(cmd.getOptionValue("M"));
             }
 
             dynamicFile = cmd.getOptionValue("df");
@@ -55,7 +61,7 @@ public class CliParser {
             }
 
         }catch (Exception e){
-            System.out.println("Command not recognized.");
+            System.out.println("Command not recognized");
             help(options);
         }
     }
