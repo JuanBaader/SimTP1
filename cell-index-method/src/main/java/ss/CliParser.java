@@ -1,29 +1,31 @@
-package ar.edu.itba;
+package ss;
 
-import org.apache.commons.*;
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
 
 public class CliParser {
 
-    public static String staticFile;
-    public static String dynamicFile;
-    static int matrixSize;
-    static double interactionRadius;
-    static boolean periodicContour = false;
-    static boolean bruteForce = false;
+    public String staticFile;
+    public String dynamicFile;
+    public double Rc;
+    public boolean periodicBoundary = false;
+    public boolean bruteForce = false;
 
     private static Options createOptions(){
         Options options = new Options();
-        options.addOption("h", "help", false, "Shows this screen.");
-        options.addOption("m","matrix", true, "Size of the squared matrix.");
-        options.addOption("rc", "radius", true, "Radius of interaction between particles.");
-        options.addOption("sf", "static_file", true, "Path to the file with the static values.");
-        options.addOption("df", "dynamic_file", true, "Path to the file with the dynamic values.");
-        options.addOption("pc", "periodic_contour", false, "Enables periodic contour conditions.");
-        options.addOption("bf", "brute_force", false, "Enables brute force mode.");
+        options.addOption("h", "help", false, "Shows help");
+        options.addOption("rc", "neighbourhood-radius", true, "Minimum radius of neighbourhood");
+        options.addOption("sf", "static-file", true, "Path to static file");
+        options.addOption("df", "dynamic-file", true, "Path to dynamic file");
+        options.addOption("pb", "periodic-boundary", false, "Enables periodic binary conditions");
+        options.addOption("bf", "brute-force", false, "Use brute force algorithm");
         return options;
     }
 
-    public static void parseOptions(String[] args){
+    public void parseOptions(String[] args){
         Options options = createOptions();
         CommandLineParser parser = new BasicParser();
 
@@ -45,14 +47,11 @@ public class CliParser {
             dynamicFile = cmd.getOptionValue("df");
             staticFile = cmd.getOptionValue("sf");
 
-            if (cmd.hasOption("m")){
-                matrixSize = Integer.parseInt(cmd.getOptionValue("m"));
-            }
             if (cmd.hasOption("rc")){
-                interactionRadius = Double.parseDouble(cmd.getOptionValue("rc"));
+                Rc = Double.parseDouble(cmd.getOptionValue("rc"));
             }
-            if (cmd.hasOption("pc")){
-                periodicContour = true;
+            if (cmd.hasOption("pb")){
+                periodicBoundary = true;
             }
 
         }catch (Exception e){

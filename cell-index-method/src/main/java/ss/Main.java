@@ -1,25 +1,32 @@
-package ar.edu.itba;
+package ss;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import ss.CliParser;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        long startTime = System.currentTimeMillis();
-
-
-        GridParser gridParser = new GridParser("data/static-10.ari", "data/dynamic-10.ari");
-        Grid grid = gridParser.readParticles();
         
-        double distance = Double.parseDouble(args[0]);
-
-        grid.generateGrid(distance);
-        grid.calculateNearBruteForce();
+        CliParser cliParser = new CliParser();
+        cliParser.parseOptions(args);
+        
+        GridParser gridParser = new GridParser(cliParser.staticFile, cliParser.dynamicFile);
+        Grid grid = gridParser.readParticles();
+        grid.periodicBoundary = cliParser.periodicBoundary;
+        grid.generateGrid(cliParser.Rc);
+        
+        long startTime = System.currentTimeMillis();
+        
+        if (cliParser.bruteForce) {
+            grid.calculateNearBruteForce();
+        } else {
+            grid.calculateNear();
+        }
 
         long totalTime = System.currentTimeMillis() - startTime;
 

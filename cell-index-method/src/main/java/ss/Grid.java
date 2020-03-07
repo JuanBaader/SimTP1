@@ -1,4 +1,4 @@
-package ar.edu.itba;
+package ss;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import static java.lang.Math.sqrt;
 
 public class Grid {
 
-    boolean outlineEnabled;
+    boolean periodicBoundary;
     double blockLength;
     double Rc;
     double maxRadius;
@@ -21,7 +21,7 @@ public class Grid {
         this.particles = particles;
         this.L = L;
         this.N = N;
-        this.outlineEnabled=false;
+        this.periodicBoundary=false;
     }
 
     public void generateGrid(double Rc){
@@ -98,13 +98,13 @@ public class Grid {
                     if(xIter < M-1 && yIter < M-1)
                         calculateMultipleDistance(particle,grid.get(yIter + 1).get(xIter + 1),Rc);
                     //agregar caso de que se una por abajo
-                    if(outlineEnabled){
+                    if(periodicBoundary){
                         if(yIter==0)
-                            calculateMultipleDistanceOutline(particle,grid.get(M).get(xIter),Rc,false,true);
+                            calculateMultipleDistanceOutline(particle,grid.get(M-1).get(xIter),Rc,false,true);
                         if(xIter==0)
-                            calculateMultipleDistanceOutline(particle,grid.get(yIter).get(M),Rc,true,false);
+                            calculateMultipleDistanceOutline(particle,grid.get(yIter).get(M-1),Rc,true,false);
                         if(yIter==0 && xIter==0)
-                            calculateMultipleDistanceOutline(particle,grid.get(M).get(M),Rc,true,true );
+                            calculateMultipleDistanceOutline(particle,grid.get(M-1).get(M-1),Rc,true,true );
                     }
                 }
             }
@@ -116,7 +116,7 @@ public class Grid {
         for (Particle p1 : particles) {
             for (Particle p2 : particles) {
                 if (p2 != p1) {
-                    if (outlineEnabled) {
+                    if (periodicBoundary) {
                         distance = calculateDistanceOutline(p1, p2, p1.getXpos() < blockLength && p2.getXpos() > blockLength * (M-1) ||
                          p2.getXpos() < blockLength && p1.getXpos() > blockLength * (M-1),
                          p1.getYpos() < blockLength && p2.getYpos() > blockLength * (M-1) ||

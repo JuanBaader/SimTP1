@@ -1,7 +1,7 @@
 from numpy import random
 
 def generateFiles(index, number, length):
-    radius = .5
+    radius = .25
     
     staticFile = open('static-' + str(index) + '.ari', 'w')
     dynamicFile = open('dynamic-' + str(index) + '.ari', 'w')

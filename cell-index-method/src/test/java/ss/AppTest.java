@@ -1,4 +1,4 @@
-package ar.edu.itba;
+package ss;
 
 import org.junit.Test;
 
