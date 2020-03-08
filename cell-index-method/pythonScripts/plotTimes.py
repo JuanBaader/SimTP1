@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import os
 
-def plotFiles(times):
+def plotFiles(times, figno):
+    plt.figure(figno)
     i = 1
     legends = []
     for file in times: 
@@ -22,14 +23,13 @@ def plotFiles(times):
     plt.xlabel('N')
     plt.ylabel('Time')
     plt.legend(legends)
-    plt.show()
 
 times = os.listdir("../results/times")
 
 times.sort()
 bfFiles = filter(lambda x: "bf" in x, times)
 nonBfFiles = filter(lambda x: "bf" not in x, times)
-plotFiles(bfFiles)
-plotFiles(nonBfFiles)
-
+plotFiles(bfFiles, 1)
+plotFiles(nonBfFiles, 2)
+plt.show()
 

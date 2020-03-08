@@ -14,6 +14,7 @@ public class CliParser {
     public boolean periodicBoundary = false;
     public boolean bruteForce = false;
     public int M;
+    public Integer chosenId;
 
     private static Options createOptions(){
         Options options = new Options();
@@ -24,6 +25,7 @@ public class CliParser {
         options.addOption("df", "dynamic-file", true, "Path to dynamic file");
         options.addOption("pb", "periodic-boundary", false, "Enables periodic binary conditions");
         options.addOption("bf", "brute-force", false, "Use brute force algorithm");
+        options.addOption("cid", "chosen-id", true, "Chosen Id of the particle whose neighbours will be displayed in a .xyz file");
         return options;
     }
 
@@ -39,6 +41,10 @@ public class CliParser {
 
             if(cmd.hasOption("bf")){
                 bruteForce = true;
+            }
+
+            if (cmd.hasOption("cid")) {
+                this.chosenId = Integer.parseInt(cmd.getOptionValue("cid"));
             }
 
             if (!cmd.hasOption("df") || !cmd.hasOption("sf")){
@@ -58,6 +64,7 @@ public class CliParser {
             } else {
                 Rc = 2.0;
             }
+
             if (cmd.hasOption("pb")){
                 periodicBoundary = true;
             }
