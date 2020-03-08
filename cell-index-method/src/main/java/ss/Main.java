@@ -28,13 +28,13 @@ public class Main {
 
         long totalTime = System.currentTimeMillis() - startTime;
 
-        writeToFile("output", grid, totalTime, cliParser.chosenId);
+        writeToFile("output", grid, totalTime, cliParser.chosenId, cliParser.bruteForce);
         System.out.println(totalTime);
     }
 
-    private static void writeToFile(String filename, Grid grid, long totalTime, Integer chosenId){
+    private static void writeToFile(String filename, Grid grid, long totalTime, Integer chosenId, boolean bruteForce){
         try {
-            FileWriter neighborWriter = new FileWriter("./results/neighbors" + "N=" + grid.N + "M=" + grid.M + (grid.periodicBoundary ? "pb" : "") + ".txt");
+            FileWriter neighborWriter = new FileWriter("./results/neighbors" + "N=" + grid.N + "M=" + grid.M + (grid.periodicBoundary ? "pb" : "") + (bruteForce ? "-bf" : "") + ".txt");
             List<Particle> particles = grid.getParticles();
             neighborWriter.write("Total Time Ellapsed (millis): " + totalTime + "\n");
             for(Particle fromParticle: particles){
@@ -46,7 +46,7 @@ public class Main {
             neighborWriter.close();
             
             if (chosenId != null) {
-                FileWriter allPositions = new FileWriter("./results/allParticles" + "N=" + grid.N + "M=" + grid.M + (grid.periodicBoundary ? "pb" : "") + ".xyz");
+                FileWriter allPositions = new FileWriter("./results/allParticles" + "N=" + grid.N + "M=" + grid.M + (grid.periodicBoundary ? "pb" : "") + (bruteForce ? "-bf" : "") + ".xyz");
                 allPositions.write(Integer.toString((int) grid.N) + "\n\n");
                 // int i;
     

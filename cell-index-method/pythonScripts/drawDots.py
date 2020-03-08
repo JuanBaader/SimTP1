@@ -1,5 +1,6 @@
+#!/bin/python3
+
 import matplotlib.pyplot as plt
-import matplotlib.axes as ax
 
 def drawDots(staticFile, dynamicFile, results, selectedParticle):
     sf = open(staticFile, 'r')
@@ -41,4 +42,4 @@ def drawDots(staticFile, dynamicFile, results, selectedParticle):
     plt.show()
 
 
-drawDots("../data/st-6.dat", "../data/dyn-6.dat", "./results/neighborsN=100.0M=4.txt", 50)
+drawDots("../../data/st-15.dat", "../../data/dyn-15.dat", "../results/neighborsN=1000.0M=13.txt", 51)
