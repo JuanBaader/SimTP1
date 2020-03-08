@@ -5,6 +5,12 @@ declare -a numbers=(0 10 20 30 40 50 100 200 300 400 500 600 700 800 900 1000)
 rm -rf $(find -iregex .*.txt)
 rm -rf $(find -iregex .*.xyz)
 
+if [ -z $1 ]; then
+    dataDir="./data"
+else
+    dataDir=$1
+fi
+
 for pb in "-pb" "" 
 do
     for M in {1..20..4} 
@@ -13,15 +19,15 @@ do
         echo $'#'Parts$'\t'Time >> results/times/resultsM=$M$pb.txt
         for i in {1..15}
         do
-            echo "java -jar target/cell-index-method-version1.0.jar -M $M -df ../data/dyn-$i.dat -sf ../data/st-$i.dat -rc 1 $pb"
-            time=$(java -jar target/cell-index-method-version1.0.jar -M $M -df ../data/dyn-$i.dat -sf ../data/st-$i.dat -rc 1 $pb)
+            echo "java -jar target/cell-index-method-version1.0.jar -M $M -df $dataDir/dyn-$i.dat -sf $dataDir/st-$i.dat -rc 1 $pb"
+            time=$(java -jar target/cell-index-method-version1.0.jar -M $M -df $dataDir/dyn-$i.dat -sf $dataDir/st-$i.dat -rc 1 $pb)
             echo ${numbers[$i]}$'\t'$time >> results/times/resultsM=$M$pb.txt
         done
     done
     for i in {1..15}
     do
-        echo "java -jar target/cell-index-method-version1.0.jar -M $M -df ../data/dyn-$i.dat -sf ../data/st-$i.dat -rc 1 $pb -bf"
-        time=$(java -jar target/cell-index-method-version1.0.jar -M $M -df ../data/dyn-$i.dat -sf ../data/st-$i.dat -rc 1 $pb -bf)
+        echo "java -jar target/cell-index-method-version1.0.jar -M $M -df $dataDir/dyn-$i.dat -sf $dataDir/st-$i.dat -rc 1 $pb -bf"
+        time=$(java -jar target/cell-index-method-version1.0.jar -M $M -df $dataDir/dyn-$i.dat -sf $dataDir/st-$i.dat -rc 1 $pb -bf)
         echo ${numbers[$i]}$'\t'$time >> results/times/resultsM=$M$pb-bf.txt
     done
 done

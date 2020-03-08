@@ -4,8 +4,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-import javax.sound.sampled.SourceDataLine;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -34,7 +32,7 @@ public class Main {
 
     private static void writeToFile(String filename, Grid grid, long totalTime, Integer chosenId, boolean bruteForce){
         try {
-            FileWriter neighborWriter = new FileWriter("./results/neighbors" + "N=" + grid.N + "M=" + grid.M + (grid.periodicBoundary ? "pb" : "") + (bruteForce ? "-bf" : "") + ".txt");
+            FileWriter neighborWriter = new FileWriter("./results/neighbors" + "N=" + grid.N + "M=" + (int)grid.M + (grid.periodicBoundary ? "pb" : "") + (bruteForce ? "-bf" : "") + ".txt");
             List<Particle> particles = grid.getParticles();
             neighborWriter.write("Total Time Ellapsed (millis): " + totalTime + "\n");
             for(Particle fromParticle: particles){
@@ -46,7 +44,7 @@ public class Main {
             neighborWriter.close();
             
             if (chosenId != null) {
-                FileWriter allPositions = new FileWriter("./results/allParticles" + "N=" + grid.N + "M=" + grid.M + (grid.periodicBoundary ? "pb" : "") + (bruteForce ? "-bf" : "") + ".xyz");
+                FileWriter allPositions = new FileWriter("./results/allParticles" + "N=" + grid.N + "M=" + (int)grid.M + (grid.periodicBoundary ? "pb" : "") + (bruteForce ? "-bf" : "") + ".xyz");
                 allPositions.write(Integer.toString((int) grid.N) + "\n\n");
                 // int i;
     

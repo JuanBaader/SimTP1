@@ -1,6 +1,7 @@
 #!/bin/python3
 
 import matplotlib.pyplot as plt
+import sys
 
 def drawDots(staticFile, dynamicFile, results, selectedParticle):
     sf = open(staticFile, 'r')
@@ -41,5 +42,7 @@ def drawDots(staticFile, dynamicFile, results, selectedParticle):
 
     plt.show()
 
-
-drawDots("../../data/st-15.dat", "../../data/dyn-15.dat", "../results/neighborsN=1000.0M=13.txt", 51)
+if len(sys.argv) == 5:
+    drawDots(sys.argv[1], sys.argv[2], sys.argv[3], int(sys.argv[4]))
+else:
+    print('Usage: drawDots [staticFilePath] [dynamicFilePath] [resultsFilePath] [selectedId]')
